@@ -1,5 +1,5 @@
 #!/bin/bash
-
+export DEBIAN_FRONTEND=noninteractive
 echo "Checking for interactive mode..."
 if [[ -t 0 ]]; then
   echo "Running interactively"
