@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 export DEBIAN_FRONTEND=noninteractive
 echo "Checking for interactive mode..."
 if [[ -t 0 ]]; then
