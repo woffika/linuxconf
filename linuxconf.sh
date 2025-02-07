@@ -14,10 +14,10 @@
 
 # Kérjük be a felhasználótól az IP-címet
   read -p "Add meg az IP-címet (pl. 192.168.1.2/24): " user_ip
-  read -p "Add meg a subnetet (DHCP): " subnet_ip
-  read -p "Add meg a netmaskot (DHCP): " netmask_ip
-  read -p "Add meg a scopeot (DHCP): " scope_ip
-  read -p "Add meg a domain server ip címét (DHCP): " domains_ip
+  read -p "Add meg a subnetet (DHCP pl. 192.168.0.0): " subnet_ip
+  read -p "Add meg a netmaskot (DHCP pl. 255.255.255.0): " netmask_ip
+  read -p "Add meg a scopeot (DHCP pl. 192.168.0.10 192.168.0.200): " scope_ip
+  read -p "Add meg a dns server ip címét (DHCP): " domains_ip
 
 # Ellenőrizzük, hogy az IP-cím formátuma helyes-e
   if [[ ! $user_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$ ]]; then
