@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo "Checking for interactive mode..."
+if [[ -t 0 ]]; then
+  echo "Running interactively"
+else
+  echo "Not interactive"
+fi
+
 # Text Colours
   bold=$(tput bold)      # ${bold}
   normal=$(tput sgr0)    # ${normal}
