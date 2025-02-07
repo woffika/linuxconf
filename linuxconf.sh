@@ -50,7 +50,8 @@ cat <<EOF | sudo tee /etc/apt/sources.list.d/webmin.list > /dev/null
   deb http://download.webmin.com/download/repository sarge contrib 
 EOF
     wget http://www.webmin.com/jcameron-key.asc 
-    sudo apt-key add jcameron-key.asc 
+    sudo apt-key add jcameron-key.asc
+    sudo apt update  
     sudo apt install webmin
 
 # Apply packages settings
@@ -151,7 +152,7 @@ cat <<EOF | sudo tee /etc/samba/smb.conf > /dev/null
    writeable = yes
 EOF
 
-  echo ${bold}${yellow}Packages settings succesfully updated!${normal}
+  echo ${bold}${yellow}Packages settings succesfully updated..${normal}
 
 # Cleanup
     sudo rm /etc/sudoers.d/99-$USER
