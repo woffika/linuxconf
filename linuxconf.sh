@@ -13,17 +13,45 @@
     echo "Defaults timestamp_timeout=-1" | sudo tee -a /etc/sudoers
 
 # Kérjük be a felhasználótól az IP-címet
-  read -p "Add meg az IP-címet (pl. 192.168.1.2/24): " user_ip
+  read -p "Add meg az IP-címet (pl. 192.168.0.254/24): " user_ip
   read -p "Add meg a subnetet (DHCP pl. 192.168.0.0): " subnet_ip
   read -p "Add meg a netmaskot (DHCP pl. 255.255.255.0): " netmask_ip
   read -p "Add meg a scopeot (DHCP pl. 192.168.0.10 192.168.0.200): " scope_ip
-  read -p "Add meg a dns server ip címét (DHCP): " domains_ip
+  read -p "Add meg a dns server ip címét (DHCP pl. 192.168.0.254): " domains_ip
 
 # Ellenőrizzük, hogy az IP-cím formátuma helyes-e
-  if [[ ! $user_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$ ]]; then
-      echo ${normal}Hibás IP-cím formátum! Példa helyes formátumra: 192.168.1.2/24${normal}
-      exit 1
-  fi
+if [[ ! $user_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$ ]]; then
+    echo ${normal}Hibás IP-cím formátum! Példa helyes formátumra: 192.168.1.2/24${normal}
+    exit 1
+fi
+
+# Ellenőrizzük, hogy a subnet IP formátuma helyes-e
+if [[ ! $subnet_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo ${normal}Hibás subnet IP formátum! Példa helyes formátumra: 192.168.0.0${normal}
+    exit 1
+fi
+
+# Ellenőrizzük, hogy a netmask IP formátuma helyes-e
+if [[ ! $netmask_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo ${normal}Hibás netmask IP formátum! Példa helyes formátumra: 255.255.255.0${normal}
+    exit 1
+fi
+
+# Ellenőrizzük, hogy a scope IP tartomány formátuma helyes-e
+# A scope ip tartománynak két IP-t kell tartalmaznia, szóközökkel elválasztva (pl. 192.168.0.10 192.168.0.200)
+if [[ ! $scope_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\ [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo ${normal}Hibás scope IP formátum! Példa helyes formátumra: 192.168.0.10 192.168.0.200${normal}
+    exit 1
+fi
+
+# Ellenőrizzük, hogy a DNS IP cím formátuma helyes-e
+if [[ ! $domains_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo ${normal}Hibás DNS IP cím formátum! Példa helyes formátumra: 192.168.0.254${normal}
+    exit 1
+fi
+
+# Ha minden validáció sikeres, akkor a szkript folytatódik
+echo ${bold}${yellow}Minden adat helyes formátumban van!${normal}
 
 # Netplan konfigurációs fájl létrehozása
 cat <<EOF | sudo tee /etc/netplan/50-cloud-init.yaml > /dev/null
