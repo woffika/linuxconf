@@ -83,7 +83,8 @@ EOF
     sudo apt install webmin -y
 
 # Apply packages settings
-  echo ${bold}${yellow}Apply packages settings...${normal}
+  echo ${bold}${yellow}Updating packages settings...${normal}
+  echo ${bold}Updating vsftpd.conf..${normal}
 cat <<EOF | sudo tee /etc/vsftpd.conf > /dev/null
 listen=NO
 listen_ipv6=YES
@@ -102,7 +103,8 @@ ssl_enable=NO
 EOF
 
   sudo service vsftpd restart 
-
+  
+  echo ${bold}Updating dhcpd.conf..${normal}
 cat <<EOF | sudo tee /etc/dhcp/dhcpd.conf > /dev/null
 default-lease-time 600; 
 max-lease-time 7200; 
@@ -114,8 +116,9 @@ subnet $subnet_ip netmask $netmask_ip {
 } 
 EOF
 
-  sudo service isc-dhcp-server restart 
-
+  sudo service isc-dhcp-server restart
+   
+  echo ${bold}Updating isc-dhcp-server..${normal}
 cat <<EOF | sudo tee /etc/default/isc-dhcp-server > /dev/null
 # Defaults for isc-dhcp-server (sourced by /etc/init.d/isc-dhcp-server)
 
@@ -139,7 +142,7 @@ INTERFACESv6=""
 EOF
 
   sudo mkdir /install 
-  
+  echo ${bold}Updating smb.conf..${normal}
 cat <<EOF | sudo tee /etc/samba/smb.conf > /dev/null
 [global]
    workgroup = WORKGROUP
@@ -180,15 +183,23 @@ cat <<EOF | sudo tee /etc/samba/smb.conf > /dev/null
    writeable = yes
 EOF
 
-  echo ${bold}${yellow}Packages settings succesfully updated..${normal}
+  echo ${bold}${yellow}Packages settings succesfully updated...${normal}
 
 # Cleanup
     sudo rm /etc/sudoers.d/99-$USER
     sudo sed -i '140d' /etc/sudoers
 
 # End of script
-  echo Reboot in 3s...
-  echo Reboot in 2s...
-  echo Reboot in 1s...
-  echo Reboot
-  #reboot
+  echo ${bold}${yellow}Please reboot the system${normal}
+  read -p "Szeretnéd újraindítani a rendszert? (y/n): " reboot_answer
+
+if [[ "$reboot_answer" == "y" || "$reboot_answer" == "yes" || "$reboot_answer" == "Y" || "$reboot_answer" == "YES" ]]; then
+    echo "Reboot 3..."
+    echo "Reboot 2..."
+    echo "Reboot 1..."
+    echo "Rebooting..."
+    reboot
+else
+    echo "The system can't be rebooted..."
+fi
+
