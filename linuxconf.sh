@@ -21,32 +21,32 @@
 
 # Ellenőrizzük, hogy az IP-cím formátuma helyes-e
 if [[ ! $user_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$ ]]; then
-    echo ${normal}Hibás IP-cím formátum! Példa helyes formátumra: 192.168.1.2/24${normal}
+    echo ${bold}${yellow}Hibás IP-cím formátum! Példa helyes formátumra: 192.168.1.2/24${normal}
     exit 1
 fi
 
 # Ellenőrizzük, hogy a subnet IP formátuma helyes-e
 if [[ ! $subnet_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo ${normal}Hibás subnet IP formátum! Példa helyes formátumra: 192.168.0.0${normal}
+    echo ${bold}${yellow}Hibás subnet IP formátum! Példa helyes formátumra: 192.168.0.0${normal}
     exit 1
 fi
 
 # Ellenőrizzük, hogy a netmask IP formátuma helyes-e
 if [[ ! $netmask_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo ${normal}Hibás netmask IP formátum! Példa helyes formátumra: 255.255.255.0${normal}
+    echo ${bold}${yellow}Hibás netmask IP formátum! Példa helyes formátumra: 255.255.255.0${normal}
     exit 1
 fi
 
 # Ellenőrizzük, hogy a scope IP tartomány formátuma helyes-e
 # A scope ip tartománynak két IP-t kell tartalmaznia, szóközökkel elválasztva (pl. 192.168.0.10 192.168.0.200)
 if [[ ! $scope_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\ [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo ${normal}Hibás scope IP formátum! Példa helyes formátumra: 192.168.0.10 192.168.0.200${normal}
+    echo${bold}${yellow}Hibás scope IP formátum! Példa helyes formátumra: 192.168.0.10 192.168.0.200${normal}
     exit 1
 fi
 
 # Ellenőrizzük, hogy a DNS IP cím formátuma helyes-e
 if [[ ! $domains_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    echo ${normal}Hibás DNS IP cím formátum! Példa helyes formátumra: 192.168.0.254${normal}
+    echo ${bold}${yellow}Hibás DNS IP cím formátum! Példa helyes formátumra: 192.168.0.254${normal}
     exit 1
 fi
 
