@@ -18,6 +18,7 @@
   read -p "Add meg a netmaskot (DHCP pl. 255.255.255.0): " netmask_ip
   read -p "Add meg a scopeot (DHCP pl. 192.168.0.10 192.168.0.200): " scope_ip
   read -p "Add meg a dns server ip címét (DHCP pl. 192.168.0.254): " domains_ip
+  read -p "Add meg a domain nevet (pl. cegnev.local): " domain_name
 
 # Ellenőrizzük, hogy az IP-cím formátuma helyes-e
 if [[ ! $user_ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/[0-9]+$ ]]; then
@@ -72,7 +73,7 @@ EOF
 
 # Installing packages
   echo ${bold}${yellow}Installing packages...${normal}  
-  sudo apt install mc  lamp-server^ phpmyadmin w3m vsftpd openssh-server isc-dhcp-server postfix alpine popa3d samba cifs-utils -y
+  sudo apt install mc  lamp-server^ phpmyadmin w3m vsftpd openssh-server isc-dhcp-server postfix alpine popa3d samba cifs-utils bind9 bind9utils bind9-doc -y
 cat <<EOF | sudo tee /etc/apt/sources.list.d/webmin.list > /dev/null
   # Repository for Webmin 
   deb http://download.webmin.com/download/repository sarge contrib 
@@ -182,6 +183,30 @@ cat <<EOF | sudo tee /etc/samba/smb.conf > /dev/null
    browseable = no
    writeable = yes
 EOF
+
+echo ${bold}Updating named.conf.local...${normal}
+cat <<EOF | sudo tee /etc/bind/named.conf.local > /dev/null
+zone "$domain_name" {
+    type master;
+    file "/etc/bind/db.$domain_name";
+};
+EOF
+
+echo ${bold}Updating another bind config file...${normal}
+cat <<EOF | sudo tee /etc/bind/db.$domain_name > /dev/null
+\$TTL    604800
+@       IN      SOA     ns.$domain_name. root.$domain_name. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      ns.$domain_name.
+ns      IN      A       $domains_ip
+@       IN      A       $domains_ip
+EOF
+
 
   echo ${bold}${yellow}Packages settings succesfully updated...${normal}
 
